@@ -15,6 +15,6 @@ We want to create a game which has the old vibes like the Nintendo 64 and playst
 - [Behance](https://www.behance.net/gallery/129078201/Bushy-Man-Game-(Work-In-Progress))
 
 ## **Conventions**
-- Use Unity version: 2020......
+- Use Unity version: 2019.3.13f1
 - Use Comments To Explain Code
 - When commiting use a clear commit message
