@@ -21,7 +21,7 @@ public class MovementController : MonoBehaviour
     private CharacterController controller;
     public Transform groundCheck;
     public LayerMask groundMask;
-    private float groundDistance = 0.6f;
+    private float groundDistance = 0.3f;
 
     private bool isGrounded;
     private float jumpHeight = 4.3f;
