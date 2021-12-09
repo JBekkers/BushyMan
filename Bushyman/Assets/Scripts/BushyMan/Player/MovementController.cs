@@ -15,7 +15,7 @@ public class MovementController : MonoBehaviour
     //##MOVEMENT##
     private float WalkSpeed = 9;
     private float stepOffset;
-
+    
     public Vector3 velocity;
     private float gravity = -20f;
     private CharacterController controller;
