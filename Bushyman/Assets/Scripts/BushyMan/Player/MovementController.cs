@@ -13,7 +13,9 @@ public class MovementController : MonoBehaviour
     float Idle2 = 5;
 
     //##MOVEMENT##
+    private float MovementSpeed;
     private float WalkSpeed = 9;
+    private float RunSpeed;
     private float stepOffset;
     
     public Vector3 velocity;
@@ -28,6 +30,8 @@ public class MovementController : MonoBehaviour
 
     private float TurnSmoothVelocity;
     private float TurnSmoothTime = 0.08f;
+
+    private bool isFalling;
 
     //##FLOAT##
     float floatTimer = 7.2f;
@@ -61,11 +65,23 @@ public class MovementController : MonoBehaviour
             float playerRotation = Mathf.Atan2(inputDir.x, inputDir.y) * Mathf.Rad2Deg + cameraTransform.eulerAngles.y;
             transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, playerRotation, ref TurnSmoothVelocity, TurnSmoothTime);
 
-            controller.Move(transform.forward * WalkSpeed * Time.deltaTime);
+            controller.Move(transform.forward * MovementSpeed * Time.deltaTime);
 
-            //##walk animation##
-            if (isGrounded) anim.SetTrigger("isWalking");
-            Idle = false; Idle2 = 10;
+
+            //######## SET RUNNING OR WALKING SPEED #########
+            RunSpeed = WalkSpeed * 1.5f;
+            if (Input.GetKey(KeyCode.LeftShift) && isGrounded)
+            {
+                MovementSpeed = RunSpeed;
+                anim.SetTrigger("isRunning");
+            }
+            else if (isGrounded) { 
+                MovementSpeed = WalkSpeed;
+                anim.SetTrigger("isWalking");
+            }
+            
+            Idle = false; 
+            Idle2 = 10;
         }
         else Idle = true;
 
@@ -78,6 +94,9 @@ public class MovementController : MonoBehaviour
         }
 
         controller.Move(velocity * Time.deltaTime);
+
+        //quick setup to test attack animation
+        if (Input.GetKeyDown(KeyCode.Mouse0)) { anim.SetTrigger("isAttacking"); }
 
         //######## JUMP #########
         if (Input.GetButtonDown("Jump") && isGrounded)
