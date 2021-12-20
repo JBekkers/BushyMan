@@ -1,16 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class DummyHit : MonoBehaviour
 {
     public Animator anim;
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter(Collision coll)
     {
-        if (collision.collider.CompareTag("PlayerHitbox"))
+        if (coll.collider.CompareTag("PlayerHitbox"))
         {
-            anim.Play("SpinAnimation");
+            Debug.Log("got hit");
+            anim.SetTrigger("Spin");
+
         }
     }
 }

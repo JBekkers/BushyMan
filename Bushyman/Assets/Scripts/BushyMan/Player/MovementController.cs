@@ -53,7 +53,7 @@ public class MovementController : MonoBehaviour
         controller.Move(velocity * Time.deltaTime);
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
-        Debug.Log(velocity);
+        //Debug.Log(velocity);
 
         //######## WALKING #########
         Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
