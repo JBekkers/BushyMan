@@ -23,7 +23,7 @@ public class Pickup : MonoBehaviour
         {
             Leafs++;
             //anim.Play("LeafUI");
+            Destroy(trigger.gameObject);
         }
-        Destroy(trigger.gameObject);
     }
 }
