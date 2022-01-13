@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class DialogueManager : MonoBehaviour
@@ -19,10 +20,13 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
+    private bool isTalking;
 
     private Queue<string> sentences;
     public TMP_Text dialogueText;
 
+    public Image npcSprite;
+    public Animator anim;
 
     private void Start()
     {
@@ -31,7 +35,11 @@ public class DialogueManager : MonoBehaviour
 
     public void StartDialogue(Dialogue dialogue)
     {
+        anim.SetBool("IsOpen", true);
+
         sentences.Clear();
+        npcSprite.sprite = dialogue.idleSprite;
+        isTalking = true;
 
         foreach (string sentence in dialogue.sentences)
         {
@@ -46,7 +54,7 @@ public class DialogueManager : MonoBehaviour
         if(sentences.Count == 0)
         {
             EndDialogue();
-            dialogueText.text = "The end";
+            dialogueText.text = "";
             return;
         }
 
@@ -59,6 +67,8 @@ public class DialogueManager : MonoBehaviour
     IEnumerator TypeSentence (string sentence)
     {
         dialogueText.text = "";
+        
+
         foreach (char letter in sentence.ToCharArray())
         {
             dialogueText.text += letter;
@@ -68,6 +78,14 @@ public class DialogueManager : MonoBehaviour
 
     void EndDialogue()
     {
+        anim.SetBool("IsOpen", false);
+        isTalking = false;
         Debug.Log("end");
+    }
+
+    public bool isDialogue()
+    {
+        Debug.Log(isTalking);
+        return isTalking;
     }
 }

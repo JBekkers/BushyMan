@@ -140,15 +140,14 @@ public class MovementController : MonoBehaviour
         //###### INTERACTION WITH NPC #######
         Debug.DrawRay(transform.position, transform.forward, Color.green, 5);
 
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E) && DialogueManager.instance.isDialogue() == false)
         {
             if (Physics.Raycast(transform.position, transform.forward, out hit, 5) && hit.transform.CompareTag("NPC"))
             {
-                Debug.Log("hit object " + hit.transform.name);
+                //Debug.Log("hit object " + hit.transform.name);
                 hit.transform.gameObject.GetComponent<DialogueTrigger>().TriggerdDialogue();
             }
-        }
-        if (Input.GetKeyDown(KeyCode.Y)){ DialogueManager.instance.DisplayNextSentence(); }
+        }else if (DialogueManager.instance.isDialogue() == true && Input.GetKeyDown(KeyCode.E)) { DialogueManager.instance.DisplayNextSentence(); }
     }
 }
 

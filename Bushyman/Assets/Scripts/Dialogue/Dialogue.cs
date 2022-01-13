@@ -4,7 +4,7 @@
 public class Dialogue
 {
     public AudioSource talksfx;
-    public Sprite[] talkSprite;
+    public Animation talkAnim;
     public Sprite idleSprite;
 
     [TextArea(3,10)]
