@@ -3,7 +3,7 @@
 [System.Serializable]
 public class Dialogue
 {
-    public AudioSource talksfx;
+    public AudioClip talksfx;
     public Animation talkAnim;
     public Sprite idleSprite;
 

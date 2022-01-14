@@ -10,7 +10,7 @@ public class MovementController : MonoBehaviour
     //##ANIMATION#
     private Animator anim;
     bool Idle;
-    float Idle2 = 5;
+    private float Idle2 = 5;
 
     //##MOVEMENT##
     private float MovementSpeed;
@@ -136,9 +136,9 @@ public class MovementController : MonoBehaviour
             }
         }
 
-        RaycastHit hit;
         //###### INTERACTION WITH NPC #######
-        Debug.DrawRay(transform.position, transform.forward, Color.green, 5);
+        RaycastHit hit;
+        //Debug.DrawRay(transform.position, transform.forward, Color.green, 5);
 
         if (Input.GetKeyDown(KeyCode.E) && DialogueManager.instance.isDialogue() == false)
         {

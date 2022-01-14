@@ -28,6 +28,9 @@ public class DialogueManager : MonoBehaviour
     public Image npcSprite;
     public Animator anim;
 
+    public AudioSource talkingSfx;
+    private bool canDisplay;
+
     private void Start()
     {
         sentences = new Queue<string>();
@@ -39,6 +42,7 @@ public class DialogueManager : MonoBehaviour
 
         sentences.Clear();
         npcSprite.sprite = dialogue.idleSprite;
+        talkingSfx.clip = dialogue.talksfx;
         isTalking = true;
 
         foreach (string sentence in dialogue.sentences)
@@ -46,8 +50,12 @@ public class DialogueManager : MonoBehaviour
             sentences.Enqueue(sentence);
         }
 
+        Debug.Log(anim.GetCurrentAnimatorStateInfo(0).normalizedTime);
+
         DisplayNextSentence();
+
     }
+
 
     public void DisplayNextSentence()
     {
@@ -61,31 +69,36 @@ public class DialogueManager : MonoBehaviour
         string sentence = sentences.Dequeue();
         StopAllCoroutines();
         StartCoroutine(TypeSentence(sentence));
+        talkingSfx.Play();
+        talkingSfx.loop = true;
+
         //Debug.Log(sentence);
     }
 
     IEnumerator TypeSentence (string sentence)
     {
         dialogueText.text = "";
-        
+
 
         foreach (char letter in sentence.ToCharArray())
         {
             dialogueText.text += letter;
-            yield return null;
+            yield return null;        
         }
+
+        talkingSfx.loop = false;
     }
 
     void EndDialogue()
     {
         anim.SetBool("IsOpen", false);
         isTalking = false;
-        Debug.Log("end");
+        //Debug.Log("end");
     }
 
     public bool isDialogue()
     {
-        Debug.Log(isTalking);
+        //Debug.Log(isTalking);
         return isTalking;
     }
 }

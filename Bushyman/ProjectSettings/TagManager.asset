@@ -8,6 +8,8 @@ TagManager:
   - PlayerHitbox
   - EnemyHitbox
   - NPC
+  - Enemy
+  - MapHazard
   layers:
   - Default
   - TransparentFX
