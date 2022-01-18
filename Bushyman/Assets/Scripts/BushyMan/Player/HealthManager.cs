@@ -1,12 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class HealthManager : MonoBehaviour
 {
-    private int Hp = 9;
-    private int numhearts = 9;
+    public int Hp;
+    public int numhearts;
+    private int maxHp;
+
+    private int lifes = 3;
+    public TMP_Text lifeText;
+    public AudioSource gameOverSfx;
+    private bool gameOver;
 
     public Image[] hearts;
     public Sprite fullheart;
@@ -14,15 +19,27 @@ public class HealthManager : MonoBehaviour
 
     private float invincibilityTimer = 0;
 
+    private void Start()
+    {
+        SetHealth();
+        UpdateHealth();
+        UpdateLifes();
+    }
+
     void Update()
     {
         if (invincibilityTimer > 0) { invincibilityTimer -= Time.deltaTime; }
 
-
-        if (Hp < 1)
+        if (Hp < 0 && lifes > 0)
         {
-            Debug.Log("lose one life");
-            //have a different check to see if you are out of lifes and then gameover
+            lifes--;
+            UpdateLifes();
+            SetHealth();
+        } 
+        
+        if (lifes <= 0 && !gameOver)
+        {
+            GameOver();
         }
     }
 
@@ -57,6 +74,20 @@ public class HealthManager : MonoBehaviour
         }
     }
 
+    private void UpdateLifes()
+    {
+        lifeText.text = "x " + lifes.ToString();
+    }
+
+    private void SetHealth()
+    {
+        Hp = 9;
+        numhearts = 9;
+        maxHp = numhearts;
+        Hp = maxHp;
+        UpdateHealth();
+    }
+
     private void TakeDamage()
     {
         Hp--;
@@ -64,15 +95,27 @@ public class HealthManager : MonoBehaviour
         //take knockback
     }
 
+    private void GameOver()
+    {
+        //Debug.Log("GameOver");
+        gameOverSfx.Play();
+        gameOver = true;
+    }
+
     private void OnControllerColliderHit(ControllerColliderHit coll)
     {
         if (coll.gameObject.CompareTag("Enemy") || coll.gameObject.CompareTag("MapHazard"))
         {
-            if(invincibilityTimer <= 0)
+            if (invincibilityTimer <= 0)
             {
                 invincibilityTimer = 2;
                 TakeDamage();
             }
+        }
+
+        if (coll.gameObject.CompareTag("Life"))
+        {
+            lifes++;
         }
     }
 }

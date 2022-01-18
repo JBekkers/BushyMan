@@ -15,7 +15,7 @@ public class Pickup : MonoBehaviour
         if (waitForPickup >= 0) { waitForPickup -= Time.deltaTime; }
         if(waitForPickup <= 0) { anim.SetBool("isOpen", false); }
 
-        LeafText.text = Leafs.ToString(); ;
+        LeafText.text = "x " + Leafs.ToString(); ;
     }
 
     private void OnTriggerEnter(Collider trigger)

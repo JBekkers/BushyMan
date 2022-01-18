@@ -10,6 +10,7 @@ TagManager:
   - NPC
   - Enemy
   - MapHazard
+  - Life
   layers:
   - Default
   - TransparentFX
