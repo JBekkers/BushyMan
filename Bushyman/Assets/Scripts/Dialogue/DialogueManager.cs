@@ -41,6 +41,7 @@ public class DialogueManager : MonoBehaviour
 
     public void StartDialogue(Dialogue dialogue)
     {
+        isTalking = true;
         sentences.Clear();
 
         dialogueboxAnim.SetBool("IsOpen", true);
@@ -60,7 +61,6 @@ public class DialogueManager : MonoBehaviour
 
         //Debug.Log("Starting to animate text");
         DisplayNextSentence();
-        isTalking = true;
     }
 
     public void DisplayNextSentence()

@@ -15,6 +15,8 @@ public class Pickup : MonoBehaviour
         if (waitForPickup >= 0) { waitForPickup -= Time.deltaTime; }
         if(waitForPickup <= 0) { anim.SetBool("isOpen", false); }
 
+        if(anim.GetBool("isOpen") == true && DialogueManager.instance.isDialogue() == true) { anim.SetBool("isOpen", false); } 
+
         LeafText.text = "x " + Leafs.ToString(); ;
     }
 

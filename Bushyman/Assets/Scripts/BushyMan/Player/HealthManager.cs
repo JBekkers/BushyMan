@@ -8,6 +8,9 @@ public class HealthManager : MonoBehaviour
     public int numhearts;
     private int maxHp;
 
+    public Animator anim;
+    private float waitForTimer;
+
     private int lifes = 3;
     public TMP_Text lifeText;
     public AudioSource gameOverSfx;
@@ -29,6 +32,11 @@ public class HealthManager : MonoBehaviour
     void Update()
     {
         if (invincibilityTimer > 0) { invincibilityTimer -= Time.deltaTime; }
+
+        if (waitForTimer >= 0) { waitForTimer -= Time.deltaTime; }
+        if (waitForTimer <= 0) { anim.SetBool("isOpen", false); }
+
+        if (anim.GetBool("isOpen") == true && DialogueManager.instance.isDialogue() == true) { anim.SetBool("isOpen", false); }
 
         if (Hp < 0 && lifes > 0)
         {
@@ -108,6 +116,8 @@ public class HealthManager : MonoBehaviour
         {
             if (invincibilityTimer <= 0)
             {
+                anim.SetBool("isOpen", true);
+                waitForTimer = 4;
                 invincibilityTimer = 2;
                 TakeDamage();
             }
