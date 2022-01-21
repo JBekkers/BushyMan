@@ -83,7 +83,7 @@ public class MovementController : MonoBehaviour
             }
             
             Idle = false; 
-            Idle2 = 10;
+            Idle2 = 30;
         }
         else Idle = true;
 
@@ -97,8 +97,12 @@ public class MovementController : MonoBehaviour
 
         controller.Move(velocity * Time.deltaTime);
 
-        //quick setup to test attack animation
-        if (Input.GetKeyDown(KeyCode.Mouse0)) { anim.SetTrigger("isAttacking"); }
+        //######## ATTACK SHORT #########
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            anim.SetTrigger("isAttacking");
+            Idle2 = 30;
+        }
 
         //######## JUMP #########
         if (Input.GetButtonDown("Jump") && isGrounded)
