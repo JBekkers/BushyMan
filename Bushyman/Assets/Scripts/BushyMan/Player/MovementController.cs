@@ -140,14 +140,18 @@ public class MovementController : MonoBehaviour
         RaycastHit hit;
         //Debug.DrawRay(transform.position, transform.forward, Color.green, 5);
 
-        if (Input.GetKeyDown(KeyCode.E) && DialogueManager.instance.isDialogue() == false)
+        if (DialogueManager.instance.isDialogue() == false && Input.GetKeyDown(KeyCode.E))
         {
             if (Physics.Raycast(transform.position, transform.forward, out hit, 5) && hit.transform.CompareTag("NPC"))
             {
                 //Debug.Log("hit object " + hit.transform.name);
                 hit.transform.gameObject.GetComponent<DialogueTrigger>().TriggerdDialogue();
             }
-        }else if (DialogueManager.instance.isDialogue() == true && Input.GetKeyDown(KeyCode.E)) { DialogueManager.instance.DisplayNextSentence(); }
+        }
+        else if (DialogueManager.instance.isDialogue() == true && Input.GetKeyDown(KeyCode.E)) 
+        {
+            DialogueManager.instance.DisplayNextSentence();
+        }
     }
 }
 

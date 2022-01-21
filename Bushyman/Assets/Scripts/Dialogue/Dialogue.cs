@@ -4,8 +4,11 @@
 public class Dialogue
 {
     public AudioClip talksfx;
-    public Animation talkAnim;
+
+    public Sprite talkSpite;
     public Sprite idleSprite;
+
+    public float talkSpeed;
 
     [TextArea(3,10)]
     public string[] sentences;

@@ -6,7 +6,7 @@ using TMPro;
 
 public class DialogueManager : MonoBehaviour
 {
-    //singleton
+    //## singleton ## 
     public static DialogueManager instance { get; private set; }
     void Awake()
     {
@@ -23,10 +23,13 @@ public class DialogueManager : MonoBehaviour
     private bool isTalking;
 
     private Queue<string> sentences;
+
     public TMP_Text dialogueText;
 
-    public Image npcSprite;
-    public Animator anim;
+    public Image NpcSprite;
+
+    public Animator dialogueboxAnim;
+    public Animator talkSpriteAnim;
 
     public AudioSource talkingSfx;
     private bool canDisplay;
@@ -38,24 +41,27 @@ public class DialogueManager : MonoBehaviour
 
     public void StartDialogue(Dialogue dialogue)
     {
-        anim.SetBool("IsOpen", true);
-
         sentences.Clear();
-        npcSprite.sprite = dialogue.idleSprite;
+
+        dialogueboxAnim.SetBool("IsOpen", true);
+        NpcSprite.sprite = dialogue.idleSprite;
         talkingSfx.clip = dialogue.talksfx;
-        isTalking = true;
 
         foreach (string sentence in dialogue.sentences)
         {
             sentences.Enqueue(sentence);
         }
-
-        Debug.Log(anim.GetCurrentAnimatorStateInfo(0).normalizedTime);
-
-        DisplayNextSentence();
-
+        StartCoroutine(CheckAnimation());
     }
 
+    private IEnumerator CheckAnimation()
+    {
+        yield return new WaitForSeconds(1.5f);
+
+        //Debug.Log("Starting to animate text");
+        DisplayNextSentence();
+        isTalking = true;
+    }
 
     public void DisplayNextSentence()
     {
@@ -69,29 +75,31 @@ public class DialogueManager : MonoBehaviour
         string sentence = sentences.Dequeue();
         StopAllCoroutines();
         StartCoroutine(TypeSentence(sentence));
+
+        talkSpriteAnim.SetBool("isTalking", true);
+
         talkingSfx.Play();
         talkingSfx.loop = true;
 
         //Debug.Log(sentence);
     }
 
-    IEnumerator TypeSentence (string sentence)
+    private IEnumerator TypeSentence (string sentence)
     {
         dialogueText.text = "";
-
 
         foreach (char letter in sentence.ToCharArray())
         {
             dialogueText.text += letter;
-            yield return null;        
+            yield return null;
         }
-
         talkingSfx.loop = false;
+        talkSpriteAnim.SetBool("isTalking", false);
     }
 
-    void EndDialogue()
+    private void EndDialogue()
     {
-        anim.SetBool("IsOpen", false);
+        dialogueboxAnim.SetBool("IsOpen", false);
         isTalking = false;
         //Debug.Log("end");
     }
