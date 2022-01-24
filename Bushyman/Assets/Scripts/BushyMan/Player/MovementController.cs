@@ -33,7 +33,7 @@ public class MovementController : MonoBehaviour
 
     private bool isFalling;
 
-    public DialogueTrigger testsomeshit;
+    //public DialogueTrigger testsomeshit;
 
     //##FLOAT##
     float floatTimer = 7.2f;
