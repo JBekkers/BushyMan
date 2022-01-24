@@ -27,12 +27,13 @@ public class DialogueManager : MonoBehaviour
     public TMP_Text dialogueText;
 
     public Image NpcSprite;
+    public Pickup pickup;
+    public bool completeSentence;
 
     public Animator dialogueboxAnim;
     public Animator talkSpriteAnim;
 
     public AudioSource talkingSfx;
-    private bool canDisplay;
 
     private void Start()
     {
@@ -48,10 +49,33 @@ public class DialogueManager : MonoBehaviour
         NpcSprite.sprite = dialogue.idleSprite;
         talkingSfx.clip = dialogue.talksfx;
 
-        foreach (string sentence in dialogue.sentences)
+        // check if the npc has a required leafs check
+        //if true check if requirement is met then display lines if not display normal lines
+        if (!dialogue.hasRequirement)
         {
-            sentences.Enqueue(sentence);
+            foreach (string sentence in dialogue.sentences)
+            {
+                sentences.Enqueue(sentence);
+            }
+        } 
+        else if (dialogue.hasRequirement)
+        {
+            if (pickup.getGoldenLeafs() < dialogue.reqCollectables)
+            {
+                foreach (string sentence in dialogue.sentences)
+                {
+                    sentences.Enqueue(sentence);
+                }
+            }
+            else if (pickup.getGoldenLeafs() >= dialogue.reqCollectables)
+            {
+                foreach (string sentence in dialogue.collectSentences)
+                {
+                    sentences.Enqueue(sentence);
+                }
+            }
         }
+
         StartCoroutine(CheckAnimation());
     }
 
@@ -87,11 +111,14 @@ public class DialogueManager : MonoBehaviour
     private IEnumerator TypeSentence (string sentence)
     {
         dialogueText.text = "";
+        string newsentence = sentence;
 
         foreach (char letter in sentence.ToCharArray())
         {
             dialogueText.text += letter;
             yield return null;
+
+            if (completeSentence) { sentence = newsentence; break; }
         }
         talkingSfx.loop = false;
         talkSpriteAnim.SetBool("isTalking", false);

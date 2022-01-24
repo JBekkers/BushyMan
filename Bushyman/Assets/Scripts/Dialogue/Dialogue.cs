@@ -12,4 +12,9 @@ public class Dialogue
 
     [TextArea(3,10)]
     public string[] sentences;
+
+    public bool hasRequirement;
+    public int reqCollectables;
+    [TextArea(3, 10)]
+    public string[] collectSentences;
 }

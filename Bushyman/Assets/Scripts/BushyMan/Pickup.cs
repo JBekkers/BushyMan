@@ -30,4 +30,9 @@ public class Pickup : MonoBehaviour
             Destroy(trigger.gameObject);
         }
     }
+
+    public int getGoldenLeafs()
+    {
+        return Leafs;
+    }
 }

@@ -18,24 +18,30 @@ public class MovementController : MonoBehaviour
     private float RunSpeed;
     private float stepOffset;
     
+    //-- Gravity --
     public Vector3 velocity;
     private float gravity = -20f;
     private CharacterController controller;
+
+    // -- Jump --
     public Transform groundCheck;
     public LayerMask groundMask;
     private float groundDistance = 0.3f;
-
     private bool isGrounded;
     private float jumpHeight = 4.3f;
 
+    // -- SMOOTH TURNING --
     private float TurnSmoothVelocity;
     private float TurnSmoothTime = 0.08f;
 
     private bool isFalling;
 
+    //## DIALOGUE SYTEM ##
     //public DialogueTrigger testsomeshit;
+    private Vector3 offset = new Vector3(0, 0.5f, 0);
+    private RaycastHit hit;
 
-    //##FLOAT##
+    //##HOVER##
     float floatTimer = 7.2f;
 
     private void Start()
@@ -141,12 +147,11 @@ public class MovementController : MonoBehaviour
         }
 
         //###### INTERACTION WITH NPC #######
-        RaycastHit hit;
-        //Debug.DrawRay(transform.position, transform.forward, Color.green, 5);
+        Debug.DrawRay(transform.position + offset, transform.forward, Color.green, 5);
 
         if (DialogueManager.instance.isDialogue() == false && Input.GetKeyDown(KeyCode.E))
         {
-            if (Physics.Raycast(transform.position, transform.forward, out hit, 5) && hit.transform.CompareTag("NPC"))
+            if (Physics.Raycast(transform.position + offset, transform.forward, out hit, 5) && hit.transform.CompareTag("NPC"))
             {
                 //Debug.Log("hit object " + hit.transform.name);
                 hit.transform.gameObject.GetComponent<DialogueTrigger>().TriggerdDialogue();
