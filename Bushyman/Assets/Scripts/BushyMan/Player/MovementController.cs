@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class MovementController : MonoBehaviour
 {
-
     private Transform cameraTransform;
 
     //##ANIMATION#
@@ -17,6 +16,9 @@ public class MovementController : MonoBehaviour
     private float WalkSpeed = 9;
     private float RunSpeed;
     private float stepOffset;
+
+    Vector2 input;
+    Vector2 inputDir;
     
     //-- Gravity --
     public Vector3 velocity;
@@ -51,21 +53,19 @@ public class MovementController : MonoBehaviour
         anim = GetComponentInChildren<Animator>();
         stepOffset = controller.stepOffset;
     }
-    private void FixedUpdate()
-    {
-        //Debug.Log("isGrounded state: " + isGrounded);
 
+    private void Update()
+    {
         //#### GRAVITY ####
         velocity.y += gravity * Time.deltaTime;
-
         controller.Move(velocity * Time.deltaTime);
+
+        //check if onGround
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
-        //Debug.Log(velocity);
-
         //######## WALKING #########
-        Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        Vector2 inputDir = input.normalized;
+        input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        inputDir = input.normalized;
 
         //###### ON THE GROUND MOVEMENT #######
         if (inputDir != Vector2.zero)
@@ -83,12 +83,13 @@ public class MovementController : MonoBehaviour
                 MovementSpeed = RunSpeed;
                 anim.SetTrigger("isRunning");
             }
-            else if (isGrounded) { 
+            else if (isGrounded)
+            {
                 MovementSpeed = WalkSpeed;
                 anim.SetTrigger("isWalking");
             }
-            
-            Idle = false; 
+
+            Idle = false;
             Idle2 = 30;
         }
         else Idle = true;
@@ -110,25 +111,6 @@ public class MovementController : MonoBehaviour
             Idle2 = 30;
         }
 
-        //######## JUMP #########
-        if (Input.GetButtonDown("Jump") && isGrounded)
-        {
-            anim.SetBool("isJumping", true);
-            floatTimer = 7.2f;
-            velocity.y = Mathf.Sqrt(-1f * jumpHeight * gravity);
-            controller.stepOffset = 0;
-        }
-
-        //######## HOVER #########
-        if (!isGrounded && Input.GetButton("Jump") && controller.velocity.y <= 0)
-        {
-            anim.SetBool("isHover", true);
-            anim.SetBool("isJumping", false);
-
-            floatTimer -= Time.deltaTime;
-            if(floatTimer >= 0) velocity.y = -0.5f;
-        }
-
         //######## IDLE ANIMATION #########
         if (Idle && isGrounded)
         {
@@ -146,6 +128,25 @@ public class MovementController : MonoBehaviour
             }
         }
 
+        //######## JUMP #########
+        if (Input.GetButtonDown("Jump") && isGrounded)
+        {
+            anim.SetBool("isJumping", true);
+            floatTimer = 7.2f;
+            velocity.y = Mathf.Sqrt(-1f * jumpHeight * gravity);
+            controller.stepOffset = 0;
+        }
+
+        //######## HOVER #########
+        if (!isGrounded && Input.GetButton("Jump") && controller.velocity.y <= 0)
+        {
+            anim.SetBool("isHover", true);
+            anim.SetBool("isJumping", false);
+
+            floatTimer -= Time.deltaTime;
+            if (floatTimer >= 0) velocity.y = -0.5f;
+        }
+
         //###### INTERACTION WITH NPC #######
         Debug.DrawRay(transform.position + offset, transform.forward, Color.green, 5);
 
@@ -157,7 +158,7 @@ public class MovementController : MonoBehaviour
                 hit.transform.gameObject.GetComponent<DialogueTrigger>().TriggerdDialogue();
             }
         }
-        else if (DialogueManager.instance.isDialogue() == true && Input.GetKeyDown(KeyCode.E)) 
+        else if (DialogueManager.instance.isDialogue() == true && Input.GetKeyDown(KeyCode.E))
         {
             DialogueManager.instance.DisplayNextSentence();
         }
