@@ -4,19 +4,25 @@ using TMPro;
 
 public class HealthManager : MonoBehaviour
 {
-    public int Hp;
-    public int numhearts;
+    private int Hp;
+    private int numhearts;
     private int maxHp;
 
     public Animator anim;
     private float waitForTimer;
 
+    [Space(10)]
     private int lifes = 3;
     public TMP_Text lifeText;
     public AudioSource gameOverSfx;
     private bool gameOver;
 
+    [Space(10)]
+    [Header("Heart Sprites")]
     public Image[] hearts;
+
+
+    [Space(20)]
     public Sprite fullheart;
     public Sprite emptyyheart;
 

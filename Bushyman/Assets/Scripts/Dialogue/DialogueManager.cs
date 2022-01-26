@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using RichTextSubstringHelper;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -21,23 +22,42 @@ public class DialogueManager : MonoBehaviour
     }
 
     private bool isTalking;
+    private bool isAnimationPlaying;
 
     private Queue<string> sentences;
+    private GameObject player;
 
+    [Header("Dialogue Box")]
     public TMP_Text dialogueText;
-
     public Image NpcSprite;
     public Pickup pickup;
-    public bool completeSentence;
 
+    [Space(10)]
+    public bool completeSentence;
+    public bool isSentence;
+
+    [Space(10)]
+    [Header("Dialogue animations")]
     public Animator dialogueboxAnim;
     public Animator talkSpriteAnim;
-
     public AudioSource talkingSfx;
+
+    [Space(10)]
+    [Header("Input")]
+    //## DIALOGUE SYTEM ##
+    //public DialogueTrigger testsomeshit;
+    private Vector3 offset = new Vector3(0, 0.5f, 0);
+    private RaycastHit hit;
 
     private void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player");
         sentences = new Queue<string>();
+    }
+
+    private void Update()
+    {
+        GetInput();
     }
 
     public void StartDialogue(Dialogue dialogue)
@@ -49,32 +69,7 @@ public class DialogueManager : MonoBehaviour
         NpcSprite.sprite = dialogue.idleSprite;
         talkingSfx.clip = dialogue.talksfx;
 
-        // check if the npc has a required leafs check
-        //if true check if requirement is met then display lines if not display normal lines
-        if (!dialogue.hasRequirement)
-        {
-            foreach (string sentence in dialogue.sentences)
-            {
-                sentences.Enqueue(sentence);
-            }
-        } 
-        else if (dialogue.hasRequirement)
-        {
-            if (pickup.getGoldenLeafs() < dialogue.reqCollectables)
-            {
-                foreach (string sentence in dialogue.sentences)
-                {
-                    sentences.Enqueue(sentence);
-                }
-            }
-            else if (pickup.getGoldenLeafs() >= dialogue.reqCollectables)
-            {
-                foreach (string sentence in dialogue.collectSentences)
-                {
-                    sentences.Enqueue(sentence);
-                }
-            }
-        }
+        checkIfRequired(dialogue);
 
         StartCoroutine(CheckAnimation());
     }
@@ -82,6 +77,7 @@ public class DialogueManager : MonoBehaviour
     private IEnumerator CheckAnimation()
     {
         yield return new WaitForSeconds(1.5f);
+        isAnimationPlaying = false;
 
         //Debug.Log("Starting to animate text");
         DisplayNextSentence();
@@ -103,6 +99,7 @@ public class DialogueManager : MonoBehaviour
         talkSpriteAnim.SetBool("isTalking", true);
 
         talkingSfx.Play();
+        isSentence = true;
         talkingSfx.loop = true;
 
         //Debug.Log(sentence);
@@ -111,19 +108,28 @@ public class DialogueManager : MonoBehaviour
     private IEnumerator TypeSentence (string sentence)
     {
         dialogueText.text = "";
-        string newsentence = sentence;
+        var richText = sentence;
+        var maker = new RichTextSubStringMaker(richText);
 
-        foreach (char letter in sentence.ToCharArray())
+        while (maker.IsConsumable())
         {
-            dialogueText.text += letter;
-            yield return null;
+            if (completeSentence) { dialogueText.text = sentence; break; }
 
-            if (completeSentence) { sentence = newsentence; break; }
+            maker.Consume();
+            dialogueText.text = maker.GetRichText();
+            yield return new WaitForSeconds(0f);
         }
+
         talkingSfx.loop = false;
+        isSentence = false;
+        completeSentence = false;
         talkSpriteAnim.SetBool("isTalking", false);
     }
 
+    public bool isDialogue()
+    {
+        return isTalking;
+    }
     private void EndDialogue()
     {
         dialogueboxAnim.SetBool("IsOpen", false);
@@ -131,9 +137,56 @@ public class DialogueManager : MonoBehaviour
         //Debug.Log("end");
     }
 
-    public bool isDialogue()
+    public void checkIfRequired(Dialogue dialogue)
     {
-        //Debug.Log(isTalking);
-        return isTalking;
+        // check if the npc has a required leafs check
+        //if true check if requirement is met then display lines if not display normal lines
+        if (!dialogue.hasRequirement)
+        {
+            foreach (string sentence in dialogue.sentences)
+            {
+                sentences.Enqueue(sentence);
+            }
+        }
+        else if (dialogue.hasRequirement)
+        {
+            if (pickup.getGoldenLeafs() < dialogue.reqCollectables)
+            {
+                foreach (string sentence in dialogue.sentences)
+                {
+                    sentences.Enqueue(sentence);
+                }
+            }
+            else if (pickup.getGoldenLeafs() >= dialogue.reqCollectables)
+            {
+                foreach (string sentence in dialogue.collectSentences)
+                {
+                    sentences.Enqueue(sentence);
+                }
+            }
+        }
+    }
+
+    public void GetInput()
+    {         //###### INTERACTION WITH NPC #######
+        //Debug.DrawRay(player.transform.position + offset, player.transform.forward, Color.green, 5);
+
+        if (!isTalking && Input.GetKeyDown(KeyCode.E))
+        {
+            if (Physics.Raycast(player.transform.position + offset, player.transform.forward, out hit, 5) && hit.transform.CompareTag("NPC"))
+            {
+                //Debug.Log("hit object " + hit.transform.name);
+                isAnimationPlaying = true;
+                hit.transform.gameObject.GetComponent<DialogueTrigger>().TriggerdDialogue();
+            }
+        }
+        else if (isTalking && Input.GetKeyDown(KeyCode.E) && !isSentence && !isAnimationPlaying)
+        { 
+            DisplayNextSentence();
+        }
+        else if (isTalking && Input.GetKeyDown(KeyCode.E) && isSentence && !isAnimationPlaying)
+        {
+            completeSentence = true;
+        }
     }
 }

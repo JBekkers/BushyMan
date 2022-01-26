@@ -8,7 +8,7 @@ public class MovementController : MonoBehaviour
 
     //##ANIMATION#
     private Animator anim;
-    bool Idle;
+    private bool Idle;
     private float Idle2 = 5;
 
     //##MOVEMENT##
@@ -21,7 +21,7 @@ public class MovementController : MonoBehaviour
     Vector2 inputDir;
     
     //-- Gravity --
-    public Vector3 velocity;
+    private Vector3 velocity;
     private float gravity = -20f;
     private CharacterController controller;
 
@@ -38,13 +38,8 @@ public class MovementController : MonoBehaviour
 
     private bool isFalling;
 
-    //## DIALOGUE SYTEM ##
-    //public DialogueTrigger testsomeshit;
-    private Vector3 offset = new Vector3(0, 0.5f, 0);
-    private RaycastHit hit;
-
     //##HOVER##
-    float floatTimer = 7.2f;
+    private float floatTimer = 7.2f;
 
     private void Start()
     {
@@ -145,22 +140,6 @@ public class MovementController : MonoBehaviour
 
             floatTimer -= Time.deltaTime;
             if (floatTimer >= 0) velocity.y = -0.5f;
-        }
-
-        //###### INTERACTION WITH NPC #######
-        Debug.DrawRay(transform.position + offset, transform.forward, Color.green, 5);
-
-        if (DialogueManager.instance.isDialogue() == false && Input.GetKeyDown(KeyCode.E))
-        {
-            if (Physics.Raycast(transform.position + offset, transform.forward, out hit, 5) && hit.transform.CompareTag("NPC"))
-            {
-                //Debug.Log("hit object " + hit.transform.name);
-                hit.transform.gameObject.GetComponent<DialogueTrigger>().TriggerdDialogue();
-            }
-        }
-        else if (DialogueManager.instance.isDialogue() == true && Input.GetKeyDown(KeyCode.E))
-        {
-            DialogueManager.instance.DisplayNextSentence();
         }
     }
 }

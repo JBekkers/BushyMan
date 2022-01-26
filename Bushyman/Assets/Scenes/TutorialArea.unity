@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -58247,7 +58247,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96a80f5c4e7665046b8e1daf81e0dbd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocity: {x: 0, y: 0, z: 0}
   groundCheck: {fileID: 6476123880341870448}
   groundMask:
     serializedVersion: 2
@@ -58264,8 +58263,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de4c07ccccde6284d9204591d9589dc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 9
-  numhearts: 9
   anim: {fileID: 843744380125609001}
   lifeText: {fileID: 843744381209169709}
   gameOverSfx: {fileID: 8065703514513696772}
@@ -60436,8 +60433,8 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 80
-  m_fontSizeBase: 80
+  m_fontSize: 70
+  m_fontSizeBase: 70
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -60453,7 +60450,7 @@ MonoBehaviour:
   m_enableWordWrapping: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
-  m_firstOverflowCharacterIndex: -1
+  m_firstOverflowCharacterIndex: 10
   m_linkedTextComponent: {fileID: 0}
   m_isLinkedTextComponent: 0
   m_isTextTruncated: 0
@@ -62245,19 +62242,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogue:
-    talksfx: {fileID: 0}
+    talksfx: {fileID: 8300000, guid: 8c3a91774328ce3469aee5913e8f6a02, type: 3}
     talkSpite: {fileID: 0}
     idleSprite: {fileID: 21300000, guid: cf098cffe9b94654a9a82cb0b3973267, type: 3}
     talkSpeed: 0
     sentences:
     - Hello, I am payment pad. I will guide u trough your adventure.
-    - I will also steal ur golden leafs for my own personal gain.
-    - come back once you have collected 25 golden leafs in this level.
+    - I will also steal ur golden leaves for my own personal gain.
+    - come back once you have collected <color=yellow>25 golden leafs</color> in
+      this level.
     - good luck bushy man!!
     hasRequirement: 1
     reqCollectables: 25
     collectSentences:
-    - Oh i see you have collected every golden leaf!! i am suprised good job!
+    - Oh i see you have collected enough leaves!! i am suprised good job!
     - u probably expect some kind of reward but too bad i dont have any. sorry......
     - come back in the full game and maybe there will be something here. (or not
       who knows)
@@ -67867,9 +67865,11 @@ MonoBehaviour:
     idleSprite: {fileID: 21300000, guid: 3f684c65c0b0aed419c15fc20355f486, type: 3}
     talkSpeed: 0
     sentences:
-    - hello, I am Mr flush. i dont have much to say yet but ill be very cool in the
-      actual game.
-    - also yes i am a toilet......
+    - Hey Bushy Man! Did you know if you press E next to a character you can chat
+      with them?
+    - Oh you already know?
+    - Well of course, you wouldn't be able to talk to me if you didn't know this
+      yet you goofball.
     hasRequirement: 0
     reqCollectables: 0
     collectSentences: []
@@ -69872,6 +69872,7 @@ MonoBehaviour:
   NpcSprite: {fileID: 843744380992119023}
   pickup: {fileID: 319320893861476119}
   completeSentence: 0
+  isSentence: 0
   dialogueboxAnim: {fileID: 843744380472770608}
   talkSpriteAnim: {fileID: 843744380992119020}
   talkingSfx: {fileID: 5749983473836179040}
