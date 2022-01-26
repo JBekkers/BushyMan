@@ -108,16 +108,15 @@ public class DialogueManager : MonoBehaviour
     private IEnumerator TypeSentence (string sentence)
     {
         dialogueText.text = "";
-        var richText = sentence;
-        var maker = new RichTextSubStringMaker(richText);
+        var subStringMaker = new RichTextSubStringMaker(sentence);
 
-        while (maker.IsConsumable())
+        while (subStringMaker.IsConsumable())
         {
-            if (completeSentence) { dialogueText.text = sentence; break; }
+            subStringMaker.Consume();
+            dialogueText.text = subStringMaker.GetRichText();
 
-            maker.Consume();
-            dialogueText.text = maker.GetRichText();
-            yield return new WaitForSeconds(0f);
+            if (completeSentence) { dialogueText.text = sentence; break; }
+            yield return new WaitForSeconds(0);
         }
 
         talkingSfx.loop = false;
