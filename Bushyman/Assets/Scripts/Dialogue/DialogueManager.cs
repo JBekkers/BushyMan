@@ -33,19 +33,28 @@ public class DialogueManager : MonoBehaviour
     public Pickup pickup;
 
     [Space(10)]
-    public bool completeSentence;
-    public bool isSentence;
+    private bool completeSentence;
+    private bool isSentence;
 
     [Space(10)]
     [Header("Dialogue animations")]
     public Animator dialogueboxAnim;
-    public Animator talkSpriteAnim;
     public AudioSource talkingSfx;
+
+    [Space(10)]
+    [Header("Animated sprites")]
+    private List<Sprite> sprites;
+    private int spritePerFrame = 1;
+    private bool isTalkingAnimation;
+
+    private int index = 0;
+    private int frame = 0;
+
+    private Sprite idleSprite;
 
     [Space(10)]
     [Header("Input")]
     //## DIALOGUE SYTEM ##
-    //public DialogueTrigger testsomeshit;
     private Vector3 offset = new Vector3(0, 0.5f, 0);
     private RaycastHit hit;
 
@@ -58,15 +67,22 @@ public class DialogueManager : MonoBehaviour
     private void Update()
     {
         GetInput();
+
+        if (isTalkingAnimation) { animateSprites(); }
+        else NpcSprite.sprite = idleSprite;
+
     }
 
     public void StartDialogue(Dialogue dialogue)
     {
+        //when first talking to a npc set all the sentences in a queue and set all the needed sprites/soundeffects of the npc your talking to
+        spritePerFrame = dialogue.talkSpeed;
         isTalking = true;
         sentences.Clear();
 
         dialogueboxAnim.SetBool("IsOpen", true);
-        NpcSprite.sprite = dialogue.idleSprite;
+        setSprites(dialogue);
+        idleSprite = dialogue.idleSprite;
         talkingSfx.clip = dialogue.talksfx;
 
         checkIfRequired(dialogue);
@@ -74,12 +90,23 @@ public class DialogueManager : MonoBehaviour
         StartCoroutine(CheckAnimation());
     }
 
+    private void setSprites(Dialogue dialogue) 
+    {
+        //set the sprites from the npc as the sprites that will be animated
+        sprites = new List<Sprite>();
+
+        for (int i = 0; i < dialogue.talkSprites.Length; i++)
+        {
+            sprites.Add(dialogue.talkSprites[i]);
+        }
+    }
+
     private IEnumerator CheckAnimation()
     {
+        //check if the dialogue box sliding in animation is done playing
         yield return new WaitForSeconds(1.5f);
         isAnimationPlaying = false;
 
-        //Debug.Log("Starting to animate text");
         DisplayNextSentence();
     }
 
@@ -92,21 +119,21 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
+        //remove old sentence from queue and display a new sentence
         string sentence = sentences.Dequeue();
         StopAllCoroutines();
         StartCoroutine(TypeSentence(sentence));
 
-        talkSpriteAnim.SetBool("isTalking", true);
-
+        //enable talking soundeffect and play sprite talking animation
+        isTalkingAnimation = true;
         talkingSfx.Play();
         isSentence = true;
         talkingSfx.loop = true;
-
-        //Debug.Log(sentence);
     }
 
     private IEnumerator TypeSentence (string sentence)
     {
+        //show every letter one by one and display it in the text field
         dialogueText.text = "";
         var subStringMaker = new RichTextSubStringMaker(sentence);
 
@@ -119,10 +146,11 @@ public class DialogueManager : MonoBehaviour
             yield return new WaitForSeconds(0);
         }
 
+        //stop the talk animation from playing and stop all the talk soundeffect
+        isTalkingAnimation = false;
         talkingSfx.loop = false;
         isSentence = false;
         completeSentence = false;
-        talkSpriteAnim.SetBool("isTalking", false);
     }
 
     public bool isDialogue()
@@ -131,9 +159,10 @@ public class DialogueManager : MonoBehaviour
     }
     private void EndDialogue()
     {
+        //end of the dialogue (plays dialogue box close animation)
         dialogueboxAnim.SetBool("IsOpen", false);
         isTalking = false;
-        //Debug.Log("end");
+        sprites.Clear();
     }
 
     public void checkIfRequired(Dialogue dialogue)
@@ -167,14 +196,13 @@ public class DialogueManager : MonoBehaviour
     }
 
     public void GetInput()
-    {         //###### INTERACTION WITH NPC #######
-        //Debug.DrawRay(player.transform.position + offset, player.transform.forward, Color.green, 5);
+    {         
+        //###### START INTERACTION WITH NPC #######
 
         if (!isTalking && Input.GetKeyDown(KeyCode.E))
         {
             if (Physics.Raycast(player.transform.position + offset, player.transform.forward, out hit, 5) && hit.transform.CompareTag("NPC"))
             {
-                //Debug.Log("hit object " + hit.transform.name);
                 isAnimationPlaying = true;
                 hit.transform.gameObject.GetComponent<DialogueTrigger>().TriggerdDialogue();
             }
@@ -186,6 +214,26 @@ public class DialogueManager : MonoBehaviour
         else if (isTalking && Input.GetKeyDown(KeyCode.E) && isSentence && !isAnimationPlaying)
         {
             completeSentence = true;
+        }
+    }
+
+    public void animateSprites()
+    {
+        //adds frame, if enough frames passed display next sprites in list
+        //if the end of list is reached start from the beginning
+
+        frame++;
+
+        if (frame > spritePerFrame)
+        {
+            NpcSprite.sprite = sprites[index];
+            frame = 0;
+            index++;
+        }
+
+        if (index >= sprites.Count)
+        {
+            index = 0;
         }
     }
 }

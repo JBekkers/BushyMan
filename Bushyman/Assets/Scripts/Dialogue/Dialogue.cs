@@ -7,10 +7,10 @@ public class Dialogue
 
     [Space(10)]
     [Header("Sprites")]
-    public Sprite talkSpite;
+    public Sprite[] talkSprites;
     public Sprite idleSprite;
 
-    public float talkSpeed;
+    public int talkSpeed;
 
     [Space(10)]
     [Header("Sentences")]
