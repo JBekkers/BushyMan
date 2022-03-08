@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2129432395365257009}
   - component: {fileID: 3036157248867631252}
   - component: {fileID: 992603533464007774}
+  - component: {fileID: 3054189990010503946}
   m_Layer: 0
   m_Name: Dummy_Broken
   m_TagString: Untagged
@@ -57,7 +58,6 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -82,7 +82,19 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &3054189990010503946
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1641161668539241867}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.0014108827, y: 0.0018004483, z: 0.003135899}
+  m_Center: {x: -0.000019769099, y: -0.00005965774, z: 0.0015572496}
 --- !u!1 &6484176832472230095
 GameObject:
   m_ObjectHideFlags: 0
@@ -94,8 +106,9 @@ GameObject:
   - component: {fileID: 8688314837126785788}
   - component: {fileID: 4743050341258068745}
   - component: {fileID: 6568496466996258758}
+  - component: {fileID: 5596342863108990746}
   m_Layer: 0
-  m_Name: Dummy_Broken.001
+  m_Name: Dummy_Broken_Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -138,7 +151,6 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -163,7 +175,20 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!136 &5596342863108990746
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6484176832472230095}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.0010911077
+  m_Height: 0.0022564123
+  m_Direction: 1
+  m_Center: {x: -0.00014240353, y: 0.00018466183, z: 0.0008802218}
 --- !u!1 &8619355219595820618
 GameObject:
   m_ObjectHideFlags: 0
@@ -175,8 +200,9 @@ GameObject:
   - component: {fileID: 8784709957060637101}
   - component: {fileID: 7673138713011499731}
   - component: {fileID: 6332665218668402507}
+  - component: {fileID: 5066102387916013655}
   m_Layer: 0
-  m_Name: Dummy_Broken.002
+  m_Name: Dummy_Broken_Arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -219,7 +245,6 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -244,4 +269,17 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!136 &5066102387916013655
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8619355219595820618}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.0005039913
+  m_Height: 0.0005812144
+  m_Direction: 1
+  m_Center: {x: 0.00001571297, y: -0.000027208745, z: 0.00014498843}
