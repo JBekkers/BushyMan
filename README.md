@@ -1,4 +1,4 @@
-# BushyMan
+# BushyMan alpha
 
 ## Table of contents
 * [What is Bushyman](#What-is-Bushyman)
